@@ -5,9 +5,12 @@ from huaweisms.api.common import get_from_url
 
 
 logger = logging.getLogger(__name__)
+life_proxy = {'http': 'http://poxy:1Modems1@176.36.24.156:7121',
+              'https': 'http://poxy:1Modems1@176.36.24.156:7121'
+              }
 
 
-def get_session_token_info(base_url: str = None):
+def get_session_token_info(base_url: str = None, proxy=None):
     """
     Get session token information
 
@@ -20,6 +23,5 @@ def get_session_token_info(base_url: str = None):
             __name__
         )
         base_url = 'http://{}/api'.format(MODEM_HOST)
-
     url = "{}/webserver/SesTokInfo".format(base_url)
-    return get_from_url(url, timeout=30)
+    return get_from_url(url, proxy=proxy, timeout=30)

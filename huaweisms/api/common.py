@@ -91,27 +91,26 @@ def check_response_headers(resp, ctx: ApiCtx):
         ctx.session_id = resp.cookies['SessionID']
 
 
-def post_to_url(url: str, data: str, ctx: ApiCtx = None, additional_headers: dict = None) -> dict:
+def post_to_url(url: str, data: str, ctx: ApiCtx = None, additional_headers: dict = None, proxy=None) -> dict:
     cookies = build_cookies(ctx)
     headers = common_headers()
 
     if additional_headers:
         headers.update(additional_headers)
 
-    r = requests.post(url, data=data, headers=headers, cookies=cookies)
+    r = requests.post(url, data=data, headers=headers, cookies=cookies, proxies=proxy)
     check_response_headers(r, ctx)
     return api_response(r)
 
 
 def get_from_url(url: str, ctx: ApiCtx = None, additional_headers: dict = None,
-                 timeout: int = None) -> dict:
+                 timeout: int = None, proxy=None) -> dict:
     cookies = build_cookies(ctx)
     headers = common_headers()
 
     if additional_headers:
         headers.update(additional_headers)
-
-    r = requests.get(url, headers=headers, cookies=cookies, timeout=timeout)
+    r = requests.get(url, headers=headers, cookies=cookies, timeout=timeout, proxies=proxy)
     check_response_headers(r, ctx)
     return api_response(r)
 

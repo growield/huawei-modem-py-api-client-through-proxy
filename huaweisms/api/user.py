@@ -18,19 +18,19 @@ def b64_sha256(data: str) -> str:
     return base64.urlsafe_b64encode(hs256).decode('utf-8', 'ignore')
 
 
-def quick_login(username: str, password: str, modem_host: str = None):
+def quick_login(username: str, password: str, modem_host: str = None, proxy=None):
     ctx = ApiCtx(modem_host=modem_host)
-    token = huaweisms.api.webserver.get_session_token_info(ctx.api_base_url)
+    token = huaweisms.api.webserver.get_session_token_info(ctx.api_base_url, proxy=proxy)
     session_token = token['response']['SesInfo'].split("=")
     ctx.session_id = session_token[1] if len(session_token) > 1 else session_token[0]
     ctx.login_token = token['response']['TokInfo']
-    response = login(ctx, username, password)
+    response = login(ctx, username, password, proxy=proxy)
     if not ctx.logged_in:
         raise ValueError(json.dumps(response))
     return ctx
 
 
-def login(ctx: ApiCtx, user_name: str, password: str):
+def login(ctx: ApiCtx, user_name: str, password: str, proxy=None):
     headers = common_headers()
     url = "{}/user/login".format(ctx.api_base_url)
 
@@ -48,8 +48,7 @@ def login(ctx: ApiCtx, user_name: str, password: str):
 #   setup headers
     headers['__RequestVerificationToken'] = ctx.login_token
     headers['X-Requested-With'] = 'XMLHttpRequest'
-
-    r = post_to_url(url, xml_data, ctx, headers)
+    r = post_to_url(url, xml_data, ctx, headers, proxy=proxy)
 
     if r['type'] == "response" and r['response'] == "OK":
         ctx.logged_in = True
@@ -57,6 +56,6 @@ def login(ctx: ApiCtx, user_name: str, password: str):
     return r
 
 
-def state_login(ctx: ApiCtx):
+def state_login(ctx: ApiCtx, proxy=None):
     url = "{}/user/state-login".format(ctx.api_base_url)
-    return get_from_url(url, ctx)
+    return get_from_url(url, ctx, proxy=proxy)
