@@ -2,22 +2,22 @@ import huaweisms.api.common
 import huaweisms.xml.util
 
 
-def get_connected_hosts(ctx: huaweisms.api.common.ApiCtx):
+def get_connected_hosts(ctx: huaweisms.api.common.ApiCtx, proxy=None):
     url = "{}/wlan/host-list".format(ctx.api_base_url)
-    return huaweisms.api.common.get_from_url(url, ctx)
+    return huaweisms.api.common.get_from_url(url, ctx, proxy=proxy)
 
 
-def block_host(ctx: huaweisms.api.common.ApiCtx, mac_address: str, hostname: str = None):
+def block_host(ctx: huaweisms.api.common.ApiCtx, mac_address: str, hostname: str = None, proxy=None):
     """
     Blocks/blacklists the given hosts.
 
     see http://192.168.8.1/html/wlanmacfilter.html
     """
     url = '{}/wlan/multi-macfilter-settings'.format(ctx.api_base_url)
-    if is_host_blocked(ctx, mac_address):
+    if is_host_blocked(ctx, mac_address, proxy=proxy):
         return True
 
-    response = get_blocked_hosts(ctx)['response']
+    response = get_blocked_hosts(ctx, proxy=proxy)['response']
 
     for ssid in response['Ssids']['Ssid']:
         for index in range(10):
@@ -37,20 +37,20 @@ def block_host(ctx: huaweisms.api.common.ApiCtx, mac_address: str, hostname: str
     headers = {
         '__RequestVerificationToken': ctx.token,
     }
-    return huaweisms.api.common.post_to_url(url, payload, ctx, additional_headers=headers)
+    return huaweisms.api.common.post_to_url(url, payload, ctx, additional_headers=headers, proxy=proxy)
 
 
-def unblock_host(ctx: huaweisms.api.common.ApiCtx, mac_address: str):
+def unblock_host(ctx: huaweisms.api.common.ApiCtx, mac_address: str, proxy=None):
     """
     Unblocks/un-blacklists the given hosts.
 
     see http://192.168.8.1/html/wlanmacfilter.html
     """
     url = '{}/wlan/multi-macfilter-settings'.format(ctx.api_base_url)
-    if not is_host_blocked(ctx, mac_address):
+    if not is_host_blocked(ctx, mac_address, proxy=proxy):
         return True
 
-    response = get_blocked_hosts(ctx)['response']
+    response = get_blocked_hosts(ctx, proxy=proxy)['response']
 
     for ssid in response['Ssids']['Ssid']:
         for index in range(10):
@@ -65,16 +65,16 @@ def unblock_host(ctx: huaweisms.api.common.ApiCtx, mac_address: str):
     headers = {
         '__RequestVerificationToken': ctx.token,
     }
-    return huaweisms.api.common.post_to_url(url, payload, ctx, additional_headers=headers)
+    return huaweisms.api.common.post_to_url(url, payload, ctx, additional_headers=headers, proxy=proxy)
 
 
-def get_blocked_hosts(ctx: huaweisms.api.common.ApiCtx):
+def get_blocked_hosts(ctx: huaweisms.api.common.ApiCtx, proxy=None):
     url = '{}/wlan/multi-macfilter-settings'.format(ctx.api_base_url)
-    return huaweisms.api.common.get_from_url(url, ctx)
+    return huaweisms.api.common.get_from_url(url, ctx, proxy=proxy)
 
 
-def is_host_blocked(ctx: huaweisms.api.common.ApiCtx, mac_address: str) -> bool:
-    response = get_blocked_hosts(ctx)
+def is_host_blocked(ctx: huaweisms.api.common.ApiCtx, mac_address: str, proxy=None) -> bool:
+    response = get_blocked_hosts(ctx, proxy=proxy)
     if not response or response.get('type') != 'response':
         raise ValueError(response)
 

@@ -11,6 +11,7 @@ testing_requirements = [
     'faker',
     'nosexcover',
     'python-coveralls',
+    'huawei-modem-api-client'
 ]
 
 linting_requirements = [

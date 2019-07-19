@@ -3,7 +3,7 @@ from datetime import datetime
 from huaweisms.api.common import post_to_url, ApiCtx, get_from_url
 
 
-def get_sms(ctx: ApiCtx, box_type: int = 1, page: int = 1, qty: int = 1):
+def get_sms(ctx: ApiCtx, box_type: int = 1, page: int = 1, qty: int = 1, proxy=None):
     xml_data = """
         <request>
             <PageIndex>{}</PageIndex>
@@ -20,7 +20,7 @@ def get_sms(ctx: ApiCtx, box_type: int = 1, page: int = 1, qty: int = 1):
         'X-Requested-With': 'XMLHttpRequest'
     }
     url = "{}/sms/sms-list".format(ctx.api_base_url)
-    r = post_to_url(url, xml_data, ctx, headers)
+    r = post_to_url(url, xml_data, ctx, headers, proxy=proxy)
 
     if r['type'] == 'response':
         if r['response']['Count'] != '0':
@@ -30,7 +30,7 @@ def get_sms(ctx: ApiCtx, box_type: int = 1, page: int = 1, qty: int = 1):
     return r
 
 
-def send_sms(ctx: ApiCtx, dest, msg: str):
+def send_sms(ctx: ApiCtx, dest, msg: str, proxy=None):
 
     now = datetime.now()
     now_str = now.strftime("%Y-%m-%d %H:%M:%S")
@@ -56,11 +56,11 @@ def send_sms(ctx: ApiCtx, dest, msg: str):
         'X-Requested-With': 'XMLHttpRequest'
     }
     url = "{}/sms/send-sms".format(ctx.api_base_url)
-    r = post_to_url(url, xml_data, ctx, headers)
+    r = post_to_url(url, xml_data, ctx, headers, proxy=proxy)
     return r
 
 
-def delete_sms(ctx: ApiCtx, index: int):
+def delete_sms(ctx: ApiCtx, index: int, proxy=None):
 
     xml_data = """
         <?xml version:"1.0" encoding="UTF-8"?>
@@ -74,10 +74,10 @@ def delete_sms(ctx: ApiCtx, index: int):
         'X-Requested-With': 'XMLHttpRequest'
     }
     url = "{}/sms/delete-sms".format(ctx.api_base_url)
-    r = post_to_url(url, xml_data, ctx, headers)
+    r = post_to_url(url, xml_data, ctx, headers, proxy=proxy)
     return r
 
 
-def sms_count(ctx: ApiCtx):
+def sms_count(ctx: ApiCtx, proxy=None):
     url = "{}/sms/sms-count".format(ctx.api_base_url)
-    return get_from_url(url, ctx)
+    return get_from_url(url, ctx, proxy=proxy)
