@@ -1,6 +1,6 @@
 from setuptools import setup
 
-version = '1.0.6'
+version = '0.0.1'
 
 with open('requirements.txt') as fd:
     requirements = [line.strip() for line in fd if line.strip()]
@@ -30,12 +30,12 @@ else:
     dev_status = '5 - Production/Stable'
 
 setup_args = {
-    'name': 'huawei-modem-api-client',
+    'name': 'huawei-modem-py-api-client-through-proxy',
     'version': version,
     'author': 'Pablo Santa Cruz, Mkhanyisi Madlavana',
     'author_email': 'pablo@roshka.com.py, mkhanyisi@gmail.com',
-    'url': 'https://github.com/pablo/huawei-modem-python-api-client',
-    'download_url': 'https://github.com/dopstar/huawei-modem-python-api-client/tarball/{0}'.format(
+    'url': 'https://github.com/growield/huawei-modem-py-api-client-through-proxy',
+    'download_url': 'https://github.com/growield/huawei-modem-py-api-client-through-proxy/tree/{0}'.format(
         version
     ),
     'package_dir': {'huaweisms': 'huaweisms'},
