@@ -54,7 +54,7 @@ urllib3>=1.22
 ### Installing
 
 ```bash
-pip install huawei-modem-api-client
+pip install huawei-modem-api-client-through-proxy
 ```
 
 ### Example
