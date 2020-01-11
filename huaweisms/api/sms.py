@@ -3,17 +3,17 @@ from datetime import datetime
 from huaweisms.api.common import post_to_url, ApiCtx, get_from_url
 
 
-def get_sms(ctx: ApiCtx, box_type: int = 1, page: int = 1, qty: int = 1, proxy=None):
+def get_sms(ctx: ApiCtx, box_type: int = 1, page: int = 1, qty: int = 1, asc: int = 0, proxy=None):
     xml_data = """
         <request>
             <PageIndex>{}</PageIndex>
             <ReadCount>{}</ReadCount>
             <BoxType>{}</BoxType>
             <SortType>0</SortType>
-            <Ascending>0</Ascending>
+            <Ascending>{}</Ascending>
             <UnreadPreferred>1</UnreadPreferred>
         </request>
-    """.format(page, qty, box_type)
+    """.format(page, qty, box_type, asc)
 
     headers = {
         '__RequestVerificationToken': ctx.token,
