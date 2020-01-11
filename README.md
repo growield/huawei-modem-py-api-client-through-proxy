@@ -6,6 +6,7 @@ The library has been tested on these devices:
 * E5180
 * E8372
 * B315
+* e3372h
 
 Please let me know if you tested it successfully with other modems as well.
 
