@@ -64,6 +64,7 @@ def check_error(elem: Element) -> Union[dict, None]:
 
 
 def api_response(r: requests.Response) -> dict:
+    r.encoding = ''
     if r.status_code != 200:
         r.raise_for_status()
 
